@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meus Apps</title>
+    <meta
+      name="description"
+      content="Página inicial com os aplicativos web desenvolvidos por alessandrociapina-cpu: ferramentas de campo, orçamentos, documentos, estudo e jogos."
+    />
+    <meta name="theme-color" content="#1d4ed8" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d4ed8'/%3E%3Cg fill='%23fff'%3E%3Crect x='7' y='7' width='8' height='8' rx='2'/%3E%3Crect x='17' y='7' width='8' height='8' rx='2'/%3E%3Crect x='7' y='17' width='8' height='8' rx='2'/%3E%3Crect x='17' y='17' width='8' height='8' rx='2' opacity='.6'/%3E%3C/g%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --surface: #ffffff;
+        --border: #e3e6eb;
+        --text: #16191f;
+        --muted: #5b6472;
+        --accent: #1d4ed8;
+        --accent-soft: #e8eefc;
+        --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 4px 16px rgba(16, 24, 40, 0.06);
+        --radius: 14px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1115;
+          --surface: #171a20;
+          --border: #262a33;
+          --text: #e8eaee;
+          --muted: #9aa3b2;
+          --accent: #7aa2ff;
+          --accent-soft: #1b2440;
+          --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          'Helvetica Neue',
+          Arial,
+          sans-serif;
+        line-height: 1.5;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+      header {
+        padding: 48px 0 24px;
+      }
+      header h1 {
+        margin: 0 0 6px;
+        font-size: clamp(1.75rem, 4vw, 2.4rem);
+        letter-spacing: -0.02em;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 60ch;
+      }
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--bg);
+        padding: 12px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+      }
+      .search {
+        flex: 1 1 240px;
+        min-width: 0;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        font: inherit;
+      }
+      .search:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .chip {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        padding: 6px 12px;
+        border-radius: 999px;
+        font: inherit;
+        font-size: 0.875rem;
+        cursor: pointer;
+      }
+      .chip[aria-pressed='true'] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        .chip[aria-pressed='true'] {
+          color: #0f1115;
+        }
+      }
+      section {
+        margin: 32px 0;
+      }
+      section h2 {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin: 0 0 12px;
+        font-weight: 600;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 14px;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+      }
+      .card-top {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .icon {
+        flex: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--accent-soft);
+        display: grid;
+        place-items: center;
+        font-size: 1.4rem;
+      }
+      .card h3 {
+        margin: 0;
+        font-size: 1.02rem;
+        line-height: 1.3;
+      }
+      .card .repo {
+        font-size: 0.78rem;
+        color: var(--muted);
+        word-break: break-all;
+      }
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        flex: 1;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .btn {
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+        padding: 8px 10px;
+        border-radius: 9px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+      .btn.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        .btn.primary {
+          color: #0f1115;
+        }
+      }
+      .btn:focus-visible,
+      .chip:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .empty {
+        color: var(--muted);
+        text-align: center;
+        padding: 48px 0;
+      }
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 24px 0 40px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      footer a {
+        color: inherit;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .card {
+          transition: none;
+        }
+        .card:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Meus Apps</h1>
+        <p>
+          Aplicativos web que desenvolvi para o trabalho de campo, orçamentos, documentos, estudo e
+          lazer. A maioria funciona offline e pode ser instalada no celular.
+        </p>
+      </header>
+
+      <div class="toolbar">
+        <input
+          id="busca"
+          class="search"
+          type="search"
+          placeholder="Buscar app…"
+          aria-label="Buscar app"
+          autocomplete="off"
+        />
+        <div class="chips" id="filtros" role="group" aria-label="Filtrar por categoria"></div>
+      </div>
+
+      <main id="lista"></main>
+
+      <footer>
+        Código-fonte em
+        <a href="https://github.com/alessandrociapina-cpu">github.com/alessandrociapina-cpu</a>.
+        Para adicionar um app, edite a lista <code>APPS</code> no <code>index.html</code>.
+      </footer>
+    </div>
+
+    <script>
+      const USUARIO = 'alessandrociapina-cpu';
+
+      const CATEGORIAS = [
+        { id: 'sinistros', nome: 'Sinistros e orçamentos' },
+        { id: 'campo', nome: 'Vistoria de campo' },
+        { id: 'documentos', nome: 'Documentos e PDF' },
+        { id: 'estudo', nome: 'Estudo e lazer' },
+      ];
+
+      // Para adicionar um app: inclua um objeto aqui. `url` é opcional — sem ela, o link
+      // aponta para o GitHub Pages do repositório (https://USUARIO.github.io/REPO/).
+      const APPS = [
+        {
+          repo: 'questionario-sinistro',
+          nome: 'Questionário de Sinistro',
+          icone: '📝',
+          cat: 'sinistros',
+          desc: 'Apuração de responsabilidade de sinistros operacionais com relatório pronto para PDF.',
+        },
+        {
+          repo: 'Sinistro_Reverso',
+          nome: 'Sinistro Reverso',
+          icone: '🧾',
+          cat: 'sinistros',
+          desc: 'Planilha orçamentária para danos causados por terceiros, com BDI e água perdida.',
+        },
+        {
+          repo: 'Orcamento_Recuperacao',
+          nome: 'Orçamento de Recuperação',
+          icone: '🏗️',
+          cat: 'sinistros',
+          desc: 'Levantamento de patologias estruturais com fotos anotadas e memória de cálculo.',
+        },
+        {
+          repo: 'planilhas_rep_patologias',
+          nome: 'Orçamento de Fissuras',
+          icone: '🧱',
+          cat: 'sinistros',
+          desc: 'Composição de preços para recuperação de fissuras em paredes e acabamento.',
+        },
+        {
+          repo: 'relatorio-ovms',
+          nome: 'Relatório Fotográfico',
+          icone: '📷',
+          cat: 'campo',
+          desc: 'Relatório fotográfico do dia a dia, 100% local no celular.',
+        },
+        {
+          repo: 'formulario-fcr',
+          nome: 'FCR — Vistoria',
+          icone: '✅',
+          cat: 'campo',
+          desc: 'Formulário de Conformidade da Reposição, com GPS e data lidos das fotos.',
+        },
+        {
+          repo: 'formulario-fct',
+          nome: 'FCT — Vistoria',
+          icone: '🧪',
+          cat: 'campo',
+          desc: 'Formulário de Controle Tecnológico para acompanhamento do serviço em campo.',
+        },
+        {
+          repo: 'formulario-gas',
+          nome: 'GAS — Vistoria',
+          icone: '📋',
+          cat: 'campo',
+          desc: 'Formulário de vistoria de campo da família FCT/FCR, offline.',
+        },
+        {
+          repo: 'checklist-gas-novo',
+          nome: 'Checklist Gás',
+          icone: '🔥',
+          cat: 'campo',
+          desc: 'Checklist de segurança para obras com interferência em rede de gás.',
+        },
+        {
+          repo: 'checklist-gas-gerencial-novo',
+          nome: 'Checklist Gás — Gerencial',
+          icone: '📊',
+          cat: 'campo',
+          desc: 'Consolidação e relatórios dos checklists de gás.',
+        },
+        {
+          repo: 'Docling-Conversor',
+          nome: 'Extrator Técnico',
+          icone: '📄',
+          cat: 'documentos',
+          desc: 'Converte notas técnicas e laudos em PDF para Markdown via Docling.',
+        },
+        {
+          repo: 'Inserir_Assinatura_no_PDF',
+          nome: 'Assinar PDF',
+          icone: '✍️',
+          cat: 'documentos',
+          desc: 'Insere sua assinatura num PDF arrastando e soltando na página.',
+        },
+        {
+          repo: 'Ferramentas',
+          nome: 'Leitor de Metadados',
+          icone: '🔍',
+          cat: 'documentos',
+          desc: 'Mostra os metadados EXIF de fotos, incluindo localização GPS.',
+        },
+        {
+          repo: 'leitura-texto',
+          nome: 'Leitura em Voz',
+          icone: '🔊',
+          cat: 'documentos',
+          desc: 'Ouça textos, ePub e PDF em voz alta com vozes neurais em português.',
+        },
+        {
+          repo: 'treino_de_italiano',
+          nome: 'Parliamo!',
+          icone: '🇮🇹',
+          cat: 'estudo',
+          desc: 'Treino de gramática italiana para brasileiros, com exercícios e progresso.',
+        },
+        {
+          repo: 'michuri_xadrez',
+          nome: 'Xadrez do Michuri',
+          icone: '♟️',
+          cat: 'estudo',
+          desc: 'Jogue contra o motor em três níveis e estude aberturas lance a lance.',
+        },
+        {
+          repo: 'cruzadas',
+          nome: 'Cruzadas',
+          icone: '🔤',
+          cat: 'estudo',
+          desc: 'Fotografe uma palavra cruzada do jornal e jogue na tela do celular.',
+        },
+        {
+          repo: 'Pipeboy',
+          nome: 'Pipeboy',
+          icone: '🦺',
+          cat: 'estudo',
+          desc: 'Jogo side-scroller de saneamento: leve os tubos até as obras.',
+        },
+        {
+          repo: 'relativistic-space-simulator',
+          nome: 'Simulador Relativístico',
+          icone: '🚀',
+          cat: 'estudo',
+          desc: 'Viagem espacial em 3D com dilatação do tempo, Doppler e céu real.',
+        },
+      ];
+
+      const lista = document.getElementById('lista');
+      const busca = document.getElementById('busca');
+      const filtros = document.getElementById('filtros');
+      let categoriaAtiva = 'todas';
+
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
+        );
+      const normalizar = (s) =>
+        s
+          .normalize('NFD')
+          .replace(/[̀-ͯ]/g, '')
+          .toLowerCase();
+
+      function cartao(app) {
+        const url = app.url || `https://${USUARIO}.github.io/${app.repo}/`;
+        const codigo = `https://github.com/${USUARIO}/${app.repo}`;
+        return `
+          <article class="card">
+            <div class="card-top">
+              <div class="icon" aria-hidden="true">${esc(app.icone)}</div>
+              <div>
+                <h3>${esc(app.nome)}</h3>
+                <div class="repo">${esc(app.repo)}</div>
+              </div>
+            </div>
+            <p>${esc(app.desc)}</p>
+            <div class="actions">
+              <a class="btn primary" href="${esc(url)}">Abrir</a>
+              <a class="btn" href="${esc(codigo)}">Código</a>
+            </div>
+          </article>`;
+      }
+
+      function render() {
+        const termo = normalizar(busca.value.trim());
+        const html = CATEGORIAS.filter((c) => categoriaAtiva === 'todas' || c.id === categoriaAtiva)
+          .map((c) => {
+            const apps = APPS.filter(
+              (a) =>
+                a.cat === c.id &&
+                (!termo || normalizar(`${a.nome} ${a.desc} ${a.repo}`).includes(termo))
+            );
+            if (!apps.length) return '';
+            return `<section><h2>${esc(c.nome)}</h2><div class="grid">${apps.map(cartao).join('')}</div></section>`;
+          })
+          .join('');
+        lista.innerHTML = html || '<p class="empty">Nenhum app encontrado.</p>';
+      }
+
+      [{ id: 'todas', nome: 'Todos' }, ...CATEGORIAS].forEach((c) => {
+        const b = document.createElement('button');
+        b.className = 'chip';
+        b.type = 'button';
+        b.textContent = c.nome;
+        b.setAttribute('aria-pressed', String(c.id === categoriaAtiva));
+        b.addEventListener('click', () => {
+          categoriaAtiva = c.id;
+          filtros
+            .querySelectorAll('.chip')
+            .forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          render();
+        });
+        filtros.appendChild(b);
+      });
+
+      busca.addEventListener('input', render);
+      render();
+    </script>
+  </body>
+</html>
